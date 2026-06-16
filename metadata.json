@@ -1,0 +1,6 @@
+{
+  "name": "SA Forge Live Trading",
+  "description": "Real-time trading simulation platform with TradingView chart, assets tracking, and interactive terminal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

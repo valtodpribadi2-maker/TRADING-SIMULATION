@@ -1,0 +1,58 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700;800&display=swap');
+
+@layer base {
+  body {
+    background-color: #FCFBF4;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+}
+
+/* Yellow Retro Neobrutalist dotted grid background seen in the PDF screenshots */
+.bg-dots-yellow {
+  background-color: #FDDF09;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.22) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+/* White Retro dotted grid pattern */
+.bg-dots-white {
+  background-color: #FCFBF4;
+  background-image: radial-gradient(rgba(0, 0, 0, 0.08) 1.5px, transparent 1.5px);
+  background-size: 16px 16px;
+}
+
+/* Custom terminal scanning lines effect */
+.terminal-scanlines {
+  background: linear-gradient(
+    rgba(18, 16, 16, 0) 50%, 
+    rgba(0, 0, 0, 0.25) 50%
+  ), linear-gradient(
+    90deg,
+    rgba(255, 0, 0, 0.06),
+    rgba(0, 255, 0, 0.02),
+    rgba(0, 0, 255, 0.06)
+  );
+  background-size: 100% 4px, 6px 100%;
+}
+
+/* Sharp retro focus outlines and shadows */
+.neo-border-sm {
+  border: 2px solid #000000;
+}
+
+.neo-border-lg {
+  border: 4px solid #000000;
+}
+
+.neo-shadow-sm {
+  box-shadow: 2px 2px 0px 0px #000000;
+}
+
+.neo-shadow-md {
+  box-shadow: 4px 4px 0px 0px #000000;
+}
+
+.neo-shadow-lg {
+  box-shadow: 8px 8px 0px 0px #000000;
+}
