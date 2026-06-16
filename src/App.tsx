@@ -612,83 +612,76 @@ export default function App() {
 
   return (
     <div id="sa_forge_app_root" className="min-h-screen flex flex-col justify-between bg-dots-white">
-      {/* 1. SOLID RETRO NAVBAR HEADER BACKGROUND (YELLOW as requested) */}
-      <header id="sa_forge_main_header" className="sticky top-0 z-40 bg-[#FDDF09] border-b-4 border-black px-4 py-3 select-none">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      {/* 1. SOLID RETRO NAVBAR HEADER */}
+      <header id="sa_forge_main_header" className="sticky top-0 z-40 bg-[#FDDF09] border-b-4 border-black px-4 py-2 select-none">
+        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2 md:gap-4">
           
-          {/* LOGO AREA (Styled exactly like Page 1 SA FORGE) */}
-          <div className="flex items-center gap-2">
-            <div className="flex items-center neo-border-sm bg-black text-[#FDDF09] font-black text-xl px-3 py-1.5 uppercase tracking-tighter neo-shadow-sm">
-              SA <span className="bg-[#FDDF09] text-black px-1 ml-1 rounded">FORGE</span>
-            </div>
-            <div className="hidden sm:flex flex-col text-[10px] font-mono leading-tight font-bold pl-1 text-black">
-              <span>TRADING SYSTEM</span>
-              <span className="text-yellow-950 font-black">PRO VERSION 100% LIVE</span>
-            </div>
-          </div>
-
-          {/* MAIN MENU BUTTONS (Matches style from PDF page 1) */}
-          <nav className="flex flex-wrap items-center gap-1 bg-[#1A1A1A] p-1 border-3 border-black neo-shadow-sm">
-            <button
-              onClick={() => { setActiveTab('BERANDA'); setSelectedAsset(null); }}
-              className={`px-3 py-1 font-extrabold text-[11px] uppercase border border-transparent transition-all ${
-                activeTab === 'BERANDA'
-                  ? 'bg-[#FDDF09] text-black border-black font-black'
-                  : 'text-gray-300 hover:text-white hover:bg-neutral-800'
-              }`}
-            >
-              Beranda
-            </button>
-            <button
-              onClick={() => { setActiveTab('PORTFOLIO'); setSelectedAsset(null); }}
-              className={`px-3 py-1 font-extrabold text-[11px] uppercase border border-transparent transition-all ${
-                activeTab === 'PORTFOLIO'
-                  ? 'bg-[#FDDF09] text-black border-black font-black'
-                  : 'text-gray-300 hover:text-white hover:bg-neutral-800'
-              }`}
-            >
-              PORTFOLIO
-            </button>
-            <button
-              onClick={() => { setActiveTab('LIVE_TERMINAL'); setSelectedAsset(null); }}
-              className={`px-3 py-1 font-extrabold text-[11px] uppercase border border-transparent transition-all ${
-                activeTab === 'LIVE_TERMINAL'
-                  ? 'bg-[#FDDF09] text-black border-black font-black'
-                  : 'text-gray-300 hover:text-white hover:bg-neutral-800'
-              }`}
-            >
-              LIVE TERMINAL
-            </button>
-          </nav>
-
-          {/* PORTFOLIO PERFORMANCE REALTIME WIDGET (Mandated in header) */}
-          <div 
-            id="portfolio_perf_header" 
-            onClick={() => setActiveTab('PORTFOLIO')}
-            className="cursor-pointer bg-white px-3 py-1.5 border-3 border-black flex items-center gap-3 select-text neo-shadow-sm hover:translate-y-0.5 transition-transform"
-            title="Saran P/L Melayang Real-Time"
-          >
-            <div className="flex items-center gap-1.5 border-r border-dashed border-black pr-2">
-              <Activity className="w-4 h-4 text-rose-600 animate-pulse" />
-              <div className="text-[9px] font-mono font-bold leading-tight uppercase text-gray-500">
-                P/L Portfolio
+          {/* LOGO AREA (Styled exactly like Page SA FORGE) */}
+          <div className="flex items-center justify-between w-full md:w-auto">
+            <div className="flex items-center gap-2">
+              <div className="flex items-center neo-border-sm bg-black text-[#FDDF09] font-black text-lg sm:text-xl px-2.5 py-1 uppercase tracking-tighter neo-shadow-sm">
+                SA <span className="bg-[#FDDF09] text-black px-1 ml-1 rounded">FORGE</span>
+              </div>
+              <div className="hidden xs:flex flex-col text-[9px] font-mono leading-tight font-bold pl-1 text-black">
+                <span>TRADING SYSTEM</span>
+                <span className="text-yellow-950 font-black">PRO VERSION 100% LIVE</span>
               </div>
             </div>
-            <div>
-              <div className={`text-xs font-black font-mono leading-none tracking-tight flex items-center ${
-                portfolioPerformance.totalPnl >= 0 ? 'text-emerald-700' : 'text-rose-600'
-              }`}>
-                {portfolioPerformance.totalPnl >= 0 ? '▲ +' : '▼ '}
-                ${portfolioPerformance.totalPnl.toLocaleString(undefined, { minimumFractionDigits: 2 })} USD
-              </div>
-              <div className="text-[8px] font-mono font-bold text-gray-500 leading-none mt-1">
-                {portfolioPerformance.activeCount} Posisi Aktif | ({portfolioPerformance.pnlPercent.toFixed(2)}% ROI)
+
+            {/* Mobile User Profile Box (adjacent to Logo on mobile to save entire rows) */}
+            <div className="md:hidden flex items-center gap-2">
+              <div id="user_profile_box_mobile" className="bg-black text-white px-2 py-1 border-2 border-black flex items-center gap-1.5 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] text-[10px] font-mono font-bold">
+                <span className="w-5 h-5 rounded bg-yellow-400 border border-white flex items-center justify-center text-black font-black text-[9px] uppercase">
+                  MV
+                </span>
+                <span className="text-emerald-400">
+                  ${walletBalance.toLocaleString(undefined, { maximumFractionDigits: 0 })}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* USER WALLET / CARD ACCENTS (Styled exactly like Page 1 right side MARK VALL) */}
-          <div id="user_profile_box" className="bg-black text-white px-3 py-1.5 border-3 border-black flex items-center gap-2 neo-shadow-sm">
+          {/* Nav menu links and live floating P&L status badge */}
+          <div className="flex flex-col sm:flex-row items-center gap-2 w-full md:w-auto justify-end">
+            <nav className="flex items-center justify-center gap-0.5 bg-[#1A1A1A] p-0.5 border-2 border-black neo-shadow-sm w-full sm:w-auto">
+              {(['BERANDA', 'PORTFOLIO', 'LIVE_TERMINAL'] as const).map((tab) => (
+                <button
+                  key={`tab-btn-${tab}`}
+                  onClick={() => { setActiveTab(tab); setSelectedAsset(null); }}
+                  className={`flex-1 sm:flex-none px-3 py-1 font-extrabold text-[10px] sm:text-[11px] uppercase transition-all ${
+                    activeTab === tab
+                      ? 'bg-[#FDDF09] text-black font-black border-black'
+                      : 'text-gray-300 hover:text-white hover:bg-neutral-800'
+                  }`}
+                >
+                  {tab === 'BERANDA' ? 'Beranda' : tab.replace('_', ' ')}
+                </button>
+              ))}
+            </nav>
+
+            <div 
+              id="portfolio_perf_header" 
+              onClick={() => setActiveTab('PORTFOLIO')}
+              className="w-full sm:w-auto cursor-pointer bg-white px-2.5 py-1 border-2 border-black flex items-center justify-between sm:justify-start gap-2 select-none neo-shadow-sm hover:translate-y-0.5 transition-transform"
+              title="Saran P/L Melayang Real-Time"
+            >
+              <div className="flex items-center gap-1 pr-1.5 border-r border-dashed border-black">
+                <Activity className="w-3.5 h-3.5 text-rose-600 animate-pulse" />
+                <span className="text-[8px] font-mono font-bold uppercase text-gray-500">P/L</span>
+              </div>
+              <div className="text-right sm:text-left">
+                <div className={`text-[10px] sm:text-[11px] font-black font-mono leading-none tracking-tight flex items-center gap-1 ${
+                  portfolioPerformance.totalPnl >= 0 ? 'text-emerald-700' : 'text-rose-600'
+                }`}>
+                  {portfolioPerformance.totalPnl >= 0 ? '▲ +' : '▼ '}
+                  ${portfolioPerformance.totalPnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Desktop User profile detail (hidden on mobile to prevent layout clutter) */}
+          <div id="user_profile_box" className="hidden md:flex bg-black text-white px-3 py-1 border-3 border-black items-center gap-2 neo-shadow-sm">
             <div className="w-6 h-6 rounded bg-yellow-400 border border-white flex items-center justify-center text-black font-black text-xs uppercase">
               MV
             </div>
@@ -1067,8 +1060,8 @@ export default function App() {
                 </span>
               </div>
 
-              {/* Positions Table */}
-              <div className="overflow-x-auto">
+              {/* Positions Table (Hidden on mobile, displayed on desktop/tablet) */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left font-mono text-xs border-collapse">
                   <thead>
                     <tr className="border-b-2 border-black bg-neutral-100 font-bold uppercase text-gray-600">
@@ -1094,7 +1087,6 @@ export default function App() {
                       </tr>
                     ) : (
                       positions.filter(p => p.status === 'ACTIVE').map((pos) => {
-                        const lotIdx = pos.pair.includes('FOREX') ? 10000 : pos.pair.includes('CRYPTO') ? 1 : 100;
                         return (
                           <tr key={pos.id} className="border-b border-gray-200 hover:bg-neutral-50/50">
                             <td className="p-3 font-semibold text-gray-400">{pos.id}</td>
@@ -1144,6 +1136,73 @@ export default function App() {
                   </tbody>
                 </table>
               </div>
+
+              {/* Mobile version stack cards (Hidden on larger layouts) */}
+              <div className="block md:hidden space-y-4">
+                {positions.filter(p => p.status === 'ACTIVE').length === 0 ? (
+                  <div className="p-6 text-center text-gray-400 italic border-2 border-dashed border-gray-200 font-mono text-xs">
+                    Belum ada posisi floating aktif berjalan. Buka Beranda untuk melakukan transaksi pertama!
+                  </div>
+                ) : (
+                  positions.filter(p => p.status === 'ACTIVE').map((pos) => (
+                    <div key={`m-act-${pos.id}`} className="border-3 border-black p-4 bg-[#FCFBF4] shadow-[4px_4px_0px_rgba(0,0,0,1)] flex flex-col gap-3">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span 
+                              onClick={() => {
+                                const assetMatch = assets.find(a => a.symbol === pos.pair);
+                                if (assetMatch) setSelectedAsset(assetMatch);
+                              }}
+                              className="font-black text-sm text-blue-600 hover:underline cursor-pointer flex items-center gap-0.5"
+                            >
+                              {pos.pair} <ArrowUpRight className="w-3.5 h-3.5" />
+                            </span>
+                            <span className={`px-2 py-0.5 font-extrabold text-[9px] border border-black ${
+                              pos.type === 'LONG' ? 'bg-emerald-300 text-emerald-950' : 'bg-rose-300 text-rose-950'
+                            }`}>
+                              {pos.type}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-gray-500 font-mono mt-1 block">ID Transaksi: {pos.id}</span>
+                        </div>
+                        <div className={`text-right font-black font-mono text-base ${pos.pnl >= 0 ? 'text-emerald-700' : 'text-rose-600'}`}>
+                          {pos.pnl >= 0 ? '+' : ''}${pos.pnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-[10px] font-mono border-t border-b border-dashed border-black/20 py-2.5 bg-neutral-100/50 px-2">
+                        <div>
+                          <span className="text-gray-500 block uppercase text-[9px]">LOT / LEVERAGE:</span>
+                          <span className="font-extrabold text-black">{pos.quantity} Lot ({pos.leverage}x)</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500 block uppercase text-[9px]">HARGA MASUK:</span>
+                          <span className="font-bold text-black">${pos.entryPrice.toLocaleString()}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500 block uppercase text-[9px]">HARGA LIVE:</span>
+                          <span className="font-bold text-black animate-pulse">${pos.currentPrice.toLocaleString()}</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-500 block uppercase text-[9px]">BATAS SL/TP:</span>
+                          <span className="font-bold text-black text-[9px]">
+                            {pos.sl ? `SL $${pos.sl.toLocaleString()}` : 'SL: -'}<br/>
+                            {pos.tp ? `TP $${pos.tp.toLocaleString()}` : 'TP: -'}
+                          </span>
+                        </div>
+                      </div>
+
+                      <button 
+                        onClick={() => executePositionClosure(pos.id)}
+                        className="w-full py-2 px-4 bg-rose-500 hover:bg-rose-600 text-white font-black text-xs uppercase border-2 border-black shadow-[2px_2px_0px_rgba(0,0,0,1)] active:translate-y-0.5"
+                      >
+                        TUTUP TRANSAKSI ELEKTRONIK ✗
+                      </button>
+                    </div>
+                  ))
+                )}
+              </div>
             </div>
 
             {/* Closed History List */}
@@ -1153,11 +1212,12 @@ export default function App() {
                   <CheckCircle className="w-5 h-5 text-emerald-600" /> HISTORI TRANSAKSI SELESAI
                 </h2>
                 <span className="font-mono text-xs font-bold text-gray-500">
-                  {positions.filter(p => p.status === 'CLOSED').length} Transaksi Terbuka
+                  {positions.filter(p => p.status === 'CLOSED').length} Transaksi Selesai
                 </span>
               </div>
 
-              <div className="overflow-x-auto">
+              {/* Table (Hidden on mobile, displayed on desktop/tablet) */}
+              <div className="hidden md:block overflow-x-auto">
                 <table className="w-full text-left font-mono text-xs border-collapse">
                   <thead>
                     <tr className="border-b-2 border-black bg-neutral-100 font-bold uppercase text-gray-600">
@@ -1182,7 +1242,7 @@ export default function App() {
                     ) : (
                       positions.filter(p => p.status === 'CLOSED').slice(0, 50).map((pos) => {
                         return (
-                          <tr key={pos.id} className="border-b border-gray-100 hover:bg-neutral-50/50">
+                          <tr key={pos.id} className="border-b border-gray-200 hover:bg-neutral-50/50">
                             <td className="p-3 text-gray-400">{pos.id}</td>
                             <td className="p-3 font-extrabold text-black">{pos.pair}</td>
                             <td className="p-3">
@@ -1211,6 +1271,48 @@ export default function App() {
                   </tbody>
                 </table>
               </div>
+
+              {/* Mobile version stack cards (Hidden on larger layouts) */}
+              <div className="block md:hidden space-y-4">
+                {positions.filter(p => p.status === 'CLOSED').length === 0 ? (
+                  <div className="p-6 text-center text-gray-400 italic border-2 border-dashed border-gray-200 font-mono text-xs">
+                    Belum ada histori transaksi selesai untuk diarsipkan.
+                  </div>
+                ) : (
+                  positions.filter(p => p.status === 'CLOSED').slice(0, 30).map((pos) => (
+                    <div key={`m-hist-${pos.id}`} className="border-3 border-black p-3.5 bg-neutral-50 shadow-[3px_3px_0px_rgba(0,0,0,1)] flex flex-col gap-2">
+                      <div className="flex justify-between items-start">
+                        <div>
+                          <div className="flex items-center gap-1.5 flex-wrap">
+                            <span className="font-extrabold text-sm text-neutral-800">{pos.pair}</span>
+                            <span className={`px-1.5 py-0.5 font-bold text-[8px] border border-black ${
+                              pos.type === 'LONG' ? 'bg-emerald-100 text-emerald-990' : 'bg-rose-100 text-rose-990'
+                            }`}>
+                              {pos.type}
+                            </span>
+                          </div>
+                          <span className="text-[10px] text-gray-400 font-mono mt-0.5 block">ID: {pos.id}</span>
+                        </div>
+                        <div className={`text-right font-black font-mono text-sm ${pos.pnl >= 0 ? 'text-emerald-700' : 'text-rose-600'}`}>
+                          {pos.pnl >= 0 ? '+' : ''}${pos.pnl.toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-1.5 text-[9.5px] font-mono border-t border-dashed border-black/10 pt-2">
+                        <div>
+                          <span className="text-gray-450 block uppercase text-[8.5px]">LOT / LEV:</span>
+                          <span className="font-bold text-neutral-800">{pos.quantity} Lot ({pos.leverage}x)</span>
+                        </div>
+                        <div>
+                          <span className="text-gray-450 block uppercase text-[8.5px]">IN / OUT:</span>
+                          <span className="font-bold text-neutral-800">${pos.entryPrice.toLocaleString()} → ${pos.closePrice?.toLocaleString() || '-'}</span>
+                        </div>
+                      </div>
+                    </div>
+                  ))
+                )}
+              </div>
+
             </div>
 
           </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useMemo, useRef } from 'react';
 import { Asset, Position } from '../types';
-import { X, ShieldAlert, TrendingUp, TrendingDown, Target, Zap, Settings2 } from 'lucide-react';
+import { X, ShieldAlert, TrendingUp, TrendingDown, Target, Zap, Settings2, Eye, EyeOff } from 'lucide-react';
 
 interface DetailModalProps {
   asset: Asset;
@@ -41,6 +41,9 @@ export default function DetailModal({
 
   // SVG Scaler Range State - represents +/- percent bounds from current/selected price
   const [scalePercent, setScalePercent] = useState<number>(2); // defaults to +/- 2% bounds
+
+  // Toggle state to show/hide guidelines and overlay positions
+  const [showOverlay, setShowOverlay] = useState<boolean>(true);
 
   // Reference price is limitPrice if LIMIT, or asset.price if MARKET
   const referencePrice = useMemo(() => {
@@ -179,22 +182,22 @@ export default function DetailModal({
   const tradingViewUrl = `https://s.tradingview.com/widgetembed/?frameElementId=tradingview_chart&symbol=${encodedWidgetSymbol}&interval=5&hidesidetoolbar=1&symboledit=0&saveimage=0&toolbarbg=f1f3f6&theme=dark&style=1&timezone=Etc%2FUTC&locale=id`;
 
   return (
-    <div id="detail_modal_backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
+    <div id="detail_modal_backdrop" className="fixed inset-0 z-50 flex items-center justify-center p-2 sm:p-4 bg-black/60 backdrop-blur-sm overflow-y-auto">
       <div 
         id="detail_modal_container" 
-        className="relative w-full max-w-6xl animate-in fade-in zoom-in-95 duration-200 bg-[#FCFBF4] border-4 border-black text-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none flex flex-col md:flex-row overflow-hidden"
+        className="relative w-full max-w-6xl animate-in fade-in zoom-in-95 duration-200 bg-[#FCFBF4] border-4 border-black text-black shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] sm:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] rounded-none flex flex-col md:flex-row overflow-y-auto max-h-[95vh] md:max-h-[92vh] md:overflow-hidden"
       >
         {/* Close button - absolute top right */}
         <button 
           id="close_modal_btn"
           onClick={onClose}
-          className="absolute right-4 top-4 z-10 p-2 bg-yellow-400 border-2 border-black hover:bg-yellow-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-transform active:translate-y-0.5"
+          className="absolute right-3 top-3 z-30 p-2 bg-yellow-400 border-2 border-black hover:bg-yellow-300 shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] transition-transform active:translate-y-0.5"
         >
-          <X className="w-5 h-5 text-black" />
+          <X className="w-4 h-4 text-black" />
         </button>
 
         {/* Left pane: Title + Visual TradingView Chart + Overlay Canvas */}
-        <div className="flex-1 p-6 border-b-4 md:border-b-0 md:border-r-4 border-black flex flex-col min-w-[320px]">
+        <div className="flex-1 p-4 sm:p-6 border-b-4 md:border-b-0 md:border-r-4 border-black flex flex-col min-w-[280px] md:overflow-y-auto md:max-h-[92vh]">
           <div className="flex items-center gap-3 mb-4">
             <span className={`px-3 py-1 text-xs font-bold uppercase border-2 border-black shadow-[1.5px_1.5px_0px_0px_rgba(0,0,0,1)] ${
               asset.theme === 'yellow' ? 'bg-yellow-300' :
@@ -237,7 +240,7 @@ export default function DetailModal({
           </div>
 
           {/* Live Chart Canvas Area */}
-          <div className="relative border-4 border-black bg-neutral-900 overflow-hidden h-[420px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+          <div className="relative border-4 border-black bg-neutral-900 overflow-hidden h-[265px] sm:h-[340px] md:h-[420px] shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
             <iframe 
               src={tradingViewUrl}
               className="w-full h-full border-0 absolute inset-0"
@@ -247,7 +250,7 @@ export default function DetailModal({
 
             {/* SVG OVERLAY CANVAS (Plots Entry, SL, TP of positions on top of chart) */}
             <svg 
-              className="absolute inset-0 w-full h-full pointer-events-none z-10"
+              className={`absolute inset-0 w-full h-full pointer-events-none z-10 ${showOverlay ? 'block' : 'hidden'}`}
               id="chart_overlay_svg"
             >
               {/* Grid bounds indicator lines (subtle top & bottom range guides) */}
@@ -367,7 +370,7 @@ export default function DetailModal({
                             strokeWidth="1.5" 
                             strokeDasharray="4,3" 
                           />
-                          <polygon points={`0,0 -4,8 4,8`} transform={`translate(${15 * 0.01 * 400}, ${slYPct * 0.01 * 420})`} fill="#EF4444" stroke="black" strokeWidth="0.5" />
+                          <circle cx="15%" cy={`${slYPct}%`} r="3.5" fill="#EF4444" stroke="black" strokeWidth="0.5" />
                           <foreignObject 
                             x="45%" 
                             y={`calc(${slYPct}% - 12px)`} 
@@ -414,10 +417,10 @@ export default function DetailModal({
               })}
             </svg>
 
-            {/* Scale controller badge inside the bottom header of chart */}
+             {/* Scale controller badge inside the bottom header of chart */}
             <div className="absolute bottom-3 left-3 z-20 flex items-center bg-black/85 border border-white/20 p-2 rounded-none space-x-1 font-mono text-white text-[10px]">
               <Settings2 className="w-3.5 h-3.5 text-yellow-400 mr-1" />
-              <span>Overlay Zoom:</span>
+              <span>Zoom:</span>
               <button 
                 onClick={() => setScalePercent(prev => Math.max(0.5, prev - 0.5))}
                 className="px-1.5 py-0.5 bg-neutral-800 hover:bg-neutral-700 rounded border border-neutral-600 font-bold"
@@ -433,23 +436,38 @@ export default function DetailModal({
               >
                 +
               </button>
+              <span className="text-white/30 px-1">|</span>
+              <button 
+                onClick={() => setShowOverlay(prev => !prev)}
+                className={`flex items-center gap-1 px-1.5 py-0.5 border font-extrabold text-[9px] uppercase pointer-events-auto transition-all ${
+                  showOverlay 
+                    ? 'border-yellow-400 bg-yellow-400/20 text-yellow-400 hover:bg-yellow-400/30' 
+                    : 'border-neutral-600 bg-neutral-800 text-neutral-400 hover:bg-neutral-700'
+                }`}
+                title={showOverlay ? "Sembunyikan garis indicator di layar" : "Tampilkan garis indicator di layar"}
+              >
+                {showOverlay ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                <span>{showOverlay ? 'Overlay: ON' : 'Overlay: OFF'}</span>
+              </button>
             </div>
             
             {/* Legend guide */}
-            <div className="absolute top-3 left-3 z-20 flex flex-col space-y-1 bg-black/80 border border-white/10 p-2 font-mono text-white text-[9px] rounded-none pointer-events-none">
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-0.5 bg-emerald-500"></span>
-                <span>LONG Entry</span>
+            {showOverlay && (
+              <div className="absolute top-3 left-3 z-20 flex flex-col space-y-1 bg-black/80 border border-white/10 p-2 font-mono text-white text-[9px] rounded-none pointer-events-none">
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-block w-2.5 h-0.5 bg-emerald-500"></span>
+                  <span>LONG Entry</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-block w-2.5 h-0.5 bg-rose-500"></span>
+                  <span>SHORT Entry</span>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <span className="inline-block w-2.5 h-0.5 bg-yellow-500 border-dashed"></span>
+                  <span>Mata Uang Spot</span>
+                </div>
               </div>
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-0.5 bg-rose-500"></span>
-                <span>SHORT Entry</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-0.5 bg-yellow-500 border-dashed"></span>
-                <span>Mata Uang Spot</span>
-              </div>
-            </div>
+            )}
           </div>
 
           <p className="text-gray-600 text-xs font-mono mt-4 leading-relaxed bg-white border border-gray-200 p-2">
@@ -458,7 +476,7 @@ export default function DetailModal({
         </div>
 
         {/* Right pane: Action Panel (Neobrutalis design) */}
-        <div id="execution_action_panel" className="w-full md:w-96 p-6 bg-[#FCFBF4] flex flex-col justify-between">
+        <div id="execution_action_panel" className="w-full md:w-96 p-4 sm:p-6 bg-[#FCFBF4] flex flex-col justify-between border-t-4 md:border-t-0 border-black">
           <div>
             <div className="flex justify-between items-center mb-5">
               <h3 className="text-lg font-black uppercase tracking-tight font-sans text-gray-900 border-b-2 border-black pb-1">
